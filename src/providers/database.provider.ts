@@ -9,7 +9,7 @@ export const databaseProviders = [
         database: 'database.db', // Просто имя файла в корне проекта
         entities: [__dirname + '/../**/*.entity{.ts,.js}'], // Простой путь
         synchronize: true,
-        logging: true,
+        logging: false,
       });
 
       return dataSource.initialize();

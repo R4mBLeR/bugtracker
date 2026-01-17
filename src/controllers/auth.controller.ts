@@ -1,8 +1,7 @@
 import {
   Body,
   Controller,
-  HttpException,
-  HttpStatus,
+  InternalServerErrorException,
   Post,
   UsePipes,
   ValidationPipe,
@@ -30,14 +29,7 @@ export class AuthController {
         data: user,
       };
     } catch (error) {
-      throw new HttpException(
-        {
-          success: false,
-          message: 'DB Error',
-          error: error.message,
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new InternalServerErrorException(error);
     }
   }
 
@@ -49,7 +41,7 @@ export class AuthController {
       forbidNonWhitelisted: true,
     }),
   )
-  async createUser(@Body() createUserDto: CreateUserDto) {
+  async loginUser(@Body() createUserDto: CreateUserDto) {
     try {
       const user = await this.authService.createUser(createUserDto);
       return {
@@ -57,14 +49,7 @@ export class AuthController {
         data: user,
       };
     } catch (error) {
-      throw new HttpException(
-        {
-          success: false,
-          message: 'DB Error',
-          error: error.message,
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new InternalServerErrorException(error);
     }
   }
 }

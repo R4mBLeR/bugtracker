@@ -1,5 +1,4 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import { ref } from 'process';
 import { CreateUserDto } from 'src/dto/create-user.dto';
 import { TokenRepository } from 'src/repositories/token.repository';
 import { UserRepository } from 'src/repositories/user.repository';
