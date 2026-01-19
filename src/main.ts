@@ -24,6 +24,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
 
+  app.enableCors();
+
   // 1. Сначала устанавливаем глобальный префикс
   const apiPrefix: string = configService.get('API_PREFIX', 'api');
   app.setGlobalPrefix(apiPrefix);
