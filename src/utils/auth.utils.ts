@@ -1,31 +1,43 @@
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import * as bcrypt from 'bcrypt';
+import * as jwt from 'jsonwebtoken';
 
 export class AuthUtils {
+  private static readonly JWT_SECRET = process.env.JWT_SECRET || 'shhhhh';
+
   static async hashPassword(password: string): Promise<string> {
-    // Используйте await с bcrypt.hash
-    return await bcrypt.hash(password, 10);
+    return bcrypt.hash(password, 10);
   }
 
-  static async comparePassword(password, hash): Promise<boolean> {
-    return await bcrypt.compare(password, hash);
+  static async comparePassword(
+    password: string,
+    hash: string,
+  ): Promise<boolean> {
+    return bcrypt.compare(password, hash);
   }
 
-  static getJwtToken(payload: object, time: string): Promise<string> {
-    return jwt.sign(payload, 'shhhhh', {
-      expiresIn: time,
-    });
+  static getJwtToken(payload: object, expiresIn: string | number): string {
+    return jwt.sign(payload, AuthUtils.JWT_SECRET, {
+      expiresIn: expiresIn,
+    } as jwt.SignOptions);
   }
 
-  static getAccessToken(payload: object): Promise<string> {
+  static getAccessToken(payload: object): string {
     return this.getJwtToken(payload, '1h');
   }
 
-  static getRefreshToken(payload: object): Promise<string> {
+  static getRefreshToken(payload: object): string {
     return this.getJwtToken(payload, '7d');
   }
 
-  static verifyToken(token: string): Promise<boolean> {
-    return jwt.verify(token, 'shhhhh');
+  static verifyToken(token: string): any {
+    try {
+      return jwt.verify(token, AuthUtils.JWT_SECRET);
+    } catch (error) {
+      return null;
+    }
+  }
+
+  static decodeToken(token: string): any {
+    return jwt.decode(token);
   }
 }
