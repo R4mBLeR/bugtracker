@@ -19,6 +19,9 @@ export class Report {
   @Column({ type: 'text' })
   description: string;
 
+  @Column()
+  status: number;
+
   @Column({ type: 'boolean', default: false })
   has_attachment: boolean;
 

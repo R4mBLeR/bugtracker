@@ -3,7 +3,6 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Report } from '../models/report.entity';
 import { ReportRepository } from '../repositories/report.repository';
 import { CreateReportDto } from 'src/dto/create-report.dto';
 
@@ -34,6 +33,7 @@ export class ReportService {
       email: reportDto.email,
       title: reportDto.title,
       description: reportDto.description,
+      status: 0,
       has_attachment: reportDto.has_attachment || false,
     });
     return report;
