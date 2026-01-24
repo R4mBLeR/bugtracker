@@ -7,9 +7,11 @@ import {
   ParseIntPipe,
   HttpStatus,
   HttpCode,
-  NotFoundException,
+  Delete,
 } from '@nestjs/common';
+import { ApiBearerAuth } from '@nestjs/swagger';
 import { CreateReportDto } from 'src/dto/create-report.dto';
+import { DeleteReportDto } from 'src/dto/delete-report.dto';
 import { ReportService } from 'src/services/report.service';
 
 @Controller('reports')
@@ -27,11 +29,6 @@ export class ReportController {
   @HttpCode(HttpStatus.OK)
   async getReportById(@Param('id', ParseIntPipe) id: number) {
     const report = await this.reportService.getReportById(id);
-
-    if (!report) {
-      throw new NotFoundException(`Report with ID ${id} not found`);
-    }
-
     return report;
   }
 
@@ -39,6 +36,14 @@ export class ReportController {
   @HttpCode(HttpStatus.CREATED)
   async createReport(@Body() createReportDto: CreateReportDto) {
     const report = await this.reportService.createReport(createReportDto);
+    return report;
+  }
+
+  @Delete()
+  @ApiBearerAuth('JWT-auth')
+  @HttpCode(HttpStatus.ACCEPTED)
+  async deleteReport(@Body() deleteReportDto: DeleteReportDto) {
+    const report = await this.reportService.deleteReport(deleteReportDto);
     return report;
   }
 }

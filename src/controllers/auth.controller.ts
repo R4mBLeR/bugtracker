@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import { AuthService } from '../services/auth.service';
 import { CreateUserDto } from 'src/dto/create-user.dto';
+import { LoginUserDto } from 'src/dto/login-user.dto';
 
 @Controller()
 export class AuthController {
@@ -22,15 +23,8 @@ export class AuthController {
     }),
   )
   async createUser(@Body() createUserDto: CreateUserDto) {
-    try {
-      const user = await this.authService.createUser(createUserDto);
-      return {
-        success: true,
-        data: user,
-      };
-    } catch (error) {
-      throw new InternalServerErrorException(error);
-    }
+    const user = await this.authService.createUser(createUserDto);
+    return user;
   }
 
   @Post('login_user')
@@ -41,15 +35,8 @@ export class AuthController {
       forbidNonWhitelisted: true,
     }),
   )
-  async loginUser(@Body() createUserDto: CreateUserDto) {
-    try {
-      const user = await this.authService.createUser(createUserDto);
-      return {
-        success: true,
-        data: user,
-      };
-    } catch (error) {
-      throw new InternalServerErrorException(error);
-    }
+  async loginUser(@Body() loginUserDto: LoginUserDto) {
+    const user = await this.authService.loginUser(loginUserDto);
+    return user;
   }
 }
