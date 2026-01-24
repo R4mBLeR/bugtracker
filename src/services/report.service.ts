@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { ReportRepository } from '../repositories/report.repository';
 import { CreateReportDto } from 'src/dto/create-report.dto';
+import { DeleteReportDto } from 'src/dto/delete-report.dto';
 
 @Injectable()
 export class ReportService {
@@ -14,7 +15,7 @@ export class ReportService {
     const reports = await this.reportRepository.findAll();
     //console.log(`ReportService: Get ${reports.length} reports from DB`);
     if (!reports || reports.length === 0) {
-      throw new NotFoundException('Not available reports found');
+      throw new NotFoundException('NO_AVAILABLE_REPORTS_FOUND');
     }
     return reports;
   }
@@ -22,7 +23,7 @@ export class ReportService {
   async getReportById(id: number) {
     const report = await this.reportRepository.findById(id);
     if (!report) {
-      throw new NotFoundException(`Report with ID ${id} not found`);
+      throw new NotFoundException(`REPORT_NOT_FOUND`);
     }
     return report;
   }
@@ -33,9 +34,16 @@ export class ReportService {
       email: reportDto.email,
       title: reportDto.title,
       description: reportDto.description,
-      status: 0,
       has_attachment: reportDto.has_attachment || false,
     });
+    return report;
+  }
+
+  async deleteReport(deleteReportDto: DeleteReportDto) {
+    const report = await this.reportRepository.delete(deleteReportDto.id);
+    if (report == undefined) {
+      throw new NotFoundException(`REPORT_NOT_FOUND`);
+    }
     return report;
   }
 

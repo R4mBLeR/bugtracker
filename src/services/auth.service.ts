@@ -1,5 +1,6 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from 'src/dto/create-user.dto';
+import { LoginUserDto } from 'src/dto/login-user.dto';
 import { TokenRepository } from 'src/repositories/token.repository';
 import { UserRepository } from 'src/repositories/user.repository';
 import { AuthUtils } from 'src/utils/auth.utils';
@@ -11,6 +12,12 @@ export class AuthService {
     private readonly tokenRepository: TokenRepository,
   ) {}
   async createUser(createUserDto: CreateUserDto) {
+    const findingUser = await this.userRepository.findByName(
+      createUserDto.username,
+    );
+    if (findingUser) {
+      throw new ConflictException(`USER_WITH_CURRENT_USERNAME_EXISTS`);
+    }
     const hash = await AuthUtils.hashPassword(createUserDto.password);
     const user = await this.userRepository.create({
       username: createUserDto.username,
@@ -24,15 +31,15 @@ export class AuthService {
     };
   }
 
-  async loginUser(username: string, password: string) {
-    const findingUser = await this.userRepository.findByName(username);
+  async loginUser(loginUserDto: LoginUserDto) {
+    const findingUser = await this.userRepository.findByName(
+      loginUserDto.username,
+    );
     if (!findingUser) {
-      throw new ConflictException(
-        `User with name:  '${username}' doesn't exists`,
-      );
+      throw new ConflictException(`INCORRECT_PASSWORD_OR_USERNAME`);
     }
     const checkHash = await AuthUtils.comparePassword(
-      password,
+      loginUserDto.password,
       findingUser?.hashPassword,
     );
     if (checkHash) {
@@ -52,16 +59,14 @@ export class AuthService {
       });
 
       if (!tokenEntity) {
-        throw new ConflictException('JWT Token Error');
+        throw new ConflictException('JWT_TOKEN_ERROR');
       }
       return {
-        id: findingUser.id,
-        username: findingUser.username,
         access_token: access_token,
         refresh_token: refresh_token,
       };
     } else {
-      throw new ConflictException(`Password is incorrect`);
+      throw new ConflictException(`INCORRECT_PASSWORD_OR_USERNAME`);
     }
   }
 }
