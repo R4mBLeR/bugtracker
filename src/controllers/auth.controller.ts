@@ -9,12 +9,14 @@ import {
 import { AuthService } from '../services/auth.service';
 import { CreateUserDto } from 'src/dto/create-user.dto';
 import { LoginUserDto } from 'src/dto/login-user.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller()
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('create_user')
+  @ApiBearerAuth('JWT-auth')
   @UsePipes(
     new ValidationPipe({
       transform: true,

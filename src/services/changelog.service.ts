@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateChangelogDto } from 'src/dto/create-changelog.dto';
+import { DeleteChangelogDto } from 'src/dto/delete-changelog.dto';
 import { ChangelogRepository } from 'src/repositories/changelog.repository';
 
 @Injectable()
@@ -28,5 +29,13 @@ export class ChangelogService {
       description: changelogDto.description,
     });
     return changelog;
+  }
+
+  async deleteChangelog(deleteChangelogDto: DeleteChangelogDto) {
+    const report = await this.changelogRepository.delete(deleteChangelogDto.id);
+    if (report == undefined) {
+      throw new NotFoundException(`CHANGELOG_NOT_FOUND`);
+    }
+    return report;
   }
 }

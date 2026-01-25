@@ -7,8 +7,11 @@ import {
   ParseIntPipe,
   HttpStatus,
   HttpCode,
+  Delete,
 } from '@nestjs/common';
+import { ApiBearerAuth } from '@nestjs/swagger';
 import { CreateChangelogDto } from 'src/dto/create-changelog.dto';
+import { DeleteChangelogDto } from 'src/dto/delete-changelog.dto';
 import { ChangelogService } from 'src/services/changelog.service';
 
 @Controller('changelogs')
@@ -30,10 +33,20 @@ export class ChangelogController {
   }
 
   @Post()
+  @ApiBearerAuth('JWT-auth')
   @HttpCode(HttpStatus.CREATED)
   async createChangelog(@Body() createChangelogDto: CreateChangelogDto) {
     const report =
       await this.changelogService.createChangelog(createChangelogDto);
+    return report;
+  }
+
+  @Delete()
+  @ApiBearerAuth('JWT-auth')
+  @HttpCode(HttpStatus.ACCEPTED)
+  async deleteChangelog(@Body() deleteChangelogDto: DeleteChangelogDto) {
+    const report =
+      await this.changelogService.deleteChangelog(deleteChangelogDto);
     return report;
   }
 }

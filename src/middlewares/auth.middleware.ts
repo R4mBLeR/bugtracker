@@ -1,4 +1,5 @@
 import {
+  ForbiddenException,
   Injectable,
   NestMiddleware,
   UnauthorizedException,
@@ -17,6 +18,10 @@ export class AuthMiddleware implements NestMiddleware {
     const success = AuthUtils.verifyToken(token);
     if (!success) {
       throw new UnauthorizedException('JWT_TOKEN_IS_EXPIRED');
+    }
+    const data = AuthUtils.decodeToken(token);
+    if (data.role != 'admin') {
+      throw new ForbiddenException('UNAUTHORIZED_ACCESS');
     }
     next();
   }
