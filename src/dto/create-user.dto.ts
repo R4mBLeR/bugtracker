@@ -6,22 +6,22 @@ export class CreateUserDto {
     example: 'Example username',
     required: true,
   })
-  @IsString({ message: 'username must be a string' })
-  @MinLength(3, { message: 'username must be minimal 3 chars' })
-  @MaxLength(16, { message: 'username must be maximum 16 chars' })
+  @IsString({ message: 'Username must be a string' })
+  @MinLength(3, { message: 'Username must be minimal 3 chars' })
+  @MaxLength(16, { message: 'Username must be maximum 16 chars' })
   username: string;
 
   @ApiProperty({
     example: 'Example password',
     required: true,
   })
-  @IsString({ message: 'password must be a string' })
+  @IsString({ message: 'Password must be a string' })
   password: string;
 
   @ApiProperty({
     example: 'Example role',
     default: 'user',
   })
-  @IsString({ message: 'role must be a string' })
+  @IsString({ message: 'Role must be a string' })
   role: string;
 }

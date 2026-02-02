@@ -32,7 +32,7 @@ export class AppModule implements NestModule {
     consumer
       .apply(AuthMiddleware)
       .forRoutes(
-        { path: 'create_user', method: RequestMethod.POST },
+        { path: 'register', method: RequestMethod.POST },
         { path: 'reports', method: RequestMethod.DELETE },
         { path: 'changelogs', method: RequestMethod.POST },
         { path: 'changelogs', method: RequestMethod.DELETE },

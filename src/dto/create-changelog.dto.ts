@@ -6,15 +6,15 @@ export class CreateChangelogDto {
     example: 'Example title',
     required: true,
   })
-  @IsString({ message: 'username must be a string' })
-  @MinLength(3, { message: 'username must be minimal 3 chars' })
-  @MaxLength(16, { message: 'username must be maximum 16 chars' })
+  @IsString({ message: 'Title must be a string' })
+  @MinLength(3, { message: 'Title must be minimal 3 chars' })
+  @MaxLength(32, { message: 'Title must be maximum 32 chars' })
   title: string;
 
   @ApiProperty({
     example: 'Example description',
     required: true,
   })
-  @IsString({ message: 'description must be a string' })
+  @IsString({ message: 'Description must be a string' })
   description: string;
 }
