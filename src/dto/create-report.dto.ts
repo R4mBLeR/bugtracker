@@ -31,7 +31,7 @@ export class CreateReportDto {
   })
   @IsString({ message: 'Description must be a string' })
   @MinLength(10, { message: 'Description must be at least 10 characters long' })
-  @MaxLength(5000, { message: 'Description cannot exceed 5000 characters' })
+  @MaxLength(3000, { message: 'Description cannot exceed 3000 characters' })
   description: string;
 
   @ApiPropertyOptional({

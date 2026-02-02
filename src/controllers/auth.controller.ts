@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  InternalServerErrorException,
   Post,
   UsePipes,
   ValidationPipe,
@@ -15,7 +14,7 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('create_user')
+  @Post('register')
   @ApiBearerAuth('JWT-auth')
   @UsePipes(
     new ValidationPipe({
@@ -29,7 +28,7 @@ export class AuthController {
     return user;
   }
 
-  @Post('login_user')
+  @Post('login')
   @UsePipes(
     new ValidationPipe({
       transform: true,
