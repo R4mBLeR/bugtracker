@@ -2,10 +2,10 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('users')
 export class User {
-  @PrimaryGeneratedColumn() // или 'uuid' для строкового ID
+  @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true }) // Оставляем unique здесь
+  @Column({ unique: true })
   username: string;
 
   @Column({ name: 'hash_password' })

@@ -1,9 +1,4 @@
-import {
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-  RequestMethod,
-} from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './controllers/app.controller';
 import { AppService } from './services/app.service';
@@ -11,7 +6,6 @@ import { DatabaseModule } from './modules/database.module';
 import { ReportModule } from './modules/report.module';
 import { AuthModule } from './modules/auth.module';
 import { ChangelogModule } from './modules/changelog.module';
-import { AuthMiddleware } from './middlewares/auth.middleware';
 
 @Module({
   imports: [
@@ -27,15 +21,4 @@ import { AuthMiddleware } from './middlewares/auth.middleware';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(AuthMiddleware)
-      .forRoutes(
-        { path: 'register', method: RequestMethod.POST },
-        { path: 'reports', method: RequestMethod.DELETE },
-        { path: 'changelogs', method: RequestMethod.POST },
-        { path: 'changelogs', method: RequestMethod.DELETE },
-      );
-  }
-}
+export class AppModule {}

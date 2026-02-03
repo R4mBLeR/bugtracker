@@ -1,28 +1,40 @@
 import {
-  ForbiddenException,
+  CanActivate,
+  ExecutionContext,
   Injectable,
-  NestMiddleware,
   UnauthorizedException,
+  ForbiddenException,
 } from '@nestjs/common';
-
-import { Request, Response, NextFunction } from 'express';
 import { AuthUtils } from 'src/utils/auth.utils';
 
 @Injectable()
-export class AuthMiddleware implements NestMiddleware {
-  use(req: Request, res: Response, next: NextFunction) {
-    const token = req.headers.authorization?.split(' ')[1];
+export class AuthGuard implements CanActivate {
+  canActivate(context: ExecutionContext): boolean {
+    const request = context.switchToHttp().getRequest();
+    const authHeader = request.headers.authorization;
+
+    const token = authHeader?.split(' ')[1];
     if (token == undefined) {
       throw new UnauthorizedException('JWT_TOKEN_NOT_FOUND');
     }
+
     const success = AuthUtils.verifyToken(token);
     if (!success) {
       throw new UnauthorizedException('JWT_TOKEN_IS_EXPIRED');
     }
+
     const data = AuthUtils.decodeToken(token);
     if (data.role != 'admin') {
       throw new ForbiddenException('UNAUTHORIZED_ACCESS');
     }
-    next();
+
+    const user = {
+      username: data.username,
+      role: data.role,
+      id: data.id,
+    };
+    request.user = user;
+
+    return true;
   }
 }

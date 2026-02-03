@@ -1,5 +1,6 @@
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
+import * as crypto from 'crypto';
 
 export class AuthUtils {
   private static readonly JWT_SECRET = process.env.JWT_SECRET || 'shhhhh';
@@ -25,8 +26,8 @@ export class AuthUtils {
     return this.getJwtToken(payload, '1h');
   }
 
-  static getRefreshToken(payload: object): string {
-    return this.getJwtToken(payload, '7d');
+  static getRefreshToken(): string {
+    return crypto.randomBytes(64).toString('hex');
   }
 
   static verifyToken(token: string): any {

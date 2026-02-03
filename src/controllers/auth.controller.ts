@@ -1,14 +1,18 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
   UsePipes,
   ValidationPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { AuthService } from '../services/auth.service';
 import { CreateUserDto } from 'src/dto/create-user.dto';
 import { LoginUserDto } from 'src/dto/login-user.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { UpdateTokensDto } from 'src/dto/update-tokens.dto';
 
 @Controller()
 export class AuthController {
@@ -16,6 +20,7 @@ export class AuthController {
 
   @Post('register')
   @ApiBearerAuth('JWT-auth')
+  @UseGuards(AuthGuard)
   @UsePipes(
     new ValidationPipe({
       transform: true,
@@ -39,5 +44,11 @@ export class AuthController {
   async loginUser(@Body() loginUserDto: LoginUserDto) {
     const user = await this.authService.loginUser(loginUserDto);
     return user;
+  }
+
+  @Post('update_tokens')
+  async updateTokens(@Body() tokensDto: UpdateTokensDto) {
+    const pair = await this.authService.updateTokens(tokensDto.refresh_token);
+    return pair;
   }
 }

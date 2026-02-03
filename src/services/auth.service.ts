@@ -43,30 +43,49 @@ export class AuthService {
       findingUser?.hashPassword,
     );
     if (checkHash) {
-      const payload = {
-        username: findingUser.username,
-        role: findingUser.role,
-        id: findingUser.id,
-      };
-
-      // 4. Генерируем JWT токен
-      const refresh_token = await AuthUtils.getRefreshToken(payload);
-      const access_token = await AuthUtils.getAccessToken(payload);
-
-      const tokenEntity = await this.tokenRepository.create({
-        user_id: findingUser.id,
-        refresh_token: refresh_token,
-      });
-
-      if (!tokenEntity) {
+      const tokens = await this.generateTokensPair(findingUser);
+      if (!tokens) {
         throw new ConflictException('JWT_TOKEN_ERROR');
       }
       return {
-        access_token: access_token,
-        refresh_token: refresh_token,
+        access_token: tokens.access_token,
+        refresh_token: tokens.refresh_token,
       };
     } else {
       throw new ConflictException(`INCORRECT_PASSWORD_OR_USERNAME`);
     }
+  }
+
+  async updateTokens(token: string) {
+    const user = await this.tokenRepository.checkToken(token);
+    if (user == null) {
+      throw new ConflictException(`REFRESH_TOKEN_IS_EXPIRED_OR_REVOKED`);
+    }
+    await this.tokenRepository.delete(token);
+    const pair = await this.generateTokensPair(user);
+    return pair;
+  }
+
+  async generateTokensPair(user: any) {
+    const payload = {
+      username: user.username,
+      role: user.role,
+      id: user.id,
+    };
+
+    const refresh_token = await AuthUtils.getRefreshToken();
+    const access_token = await AuthUtils.getAccessToken(payload);
+
+    await this.tokenRepository.create({
+      refresh_token,
+      expires_at: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+      user: user,
+    });
+
+    const tokens = {
+      access_token: access_token,
+      refresh_token: refresh_token,
+    };
+    return tokens;
   }
 }

@@ -28,6 +28,14 @@ export class ReportService {
     return report;
   }
 
+  async getReportsByStatus(status: string) {
+    const reports = await this.reportRepository.findByStatus(status);
+    if (!reports || reports.length === 0) {
+      throw new NotFoundException('NO_AVAILABLE_REPORTS_FOUND');
+    }
+    return reports;
+  }
+
   async createReport(reportDto: CreateReportDto) {
     await this.checkEmailCooldown(reportDto.email);
     const report = await this.reportRepository.create({

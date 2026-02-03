@@ -23,6 +23,10 @@ export class ReportRepository {
     return await this.repo.find({ where: { email } });
   }
 
+  async findByStatus(status: string): Promise<Report[]> {
+    return await this.repo.find({ where: { status } });
+  }
+
   async create(reportData: Partial<Report>): Promise<Report> {
     const report = this.repo.create(reportData);
     return await this.repo.save(report);

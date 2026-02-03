@@ -8,10 +8,12 @@ import {
   HttpStatus,
   HttpCode,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { CreateChangelogDto } from 'src/dto/create-changelog.dto';
 import { DeleteChangelogDto } from 'src/dto/delete-changelog.dto';
+import { AuthGuard } from 'src/guards/auth.guard';
 import { ChangelogService } from 'src/services/changelog.service';
 
 @Controller('changelogs')
@@ -34,6 +36,7 @@ export class ChangelogController {
 
   @Post()
   @ApiBearerAuth('JWT-auth')
+  @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.CREATED)
   async createChangelog(@Body() createChangelogDto: CreateChangelogDto) {
     const report =
@@ -43,6 +46,7 @@ export class ChangelogController {
 
   @Delete()
   @ApiBearerAuth('JWT-auth')
+  @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.ACCEPTED)
   async deleteChangelog(@Body() deleteChangelogDto: DeleteChangelogDto) {
     const report =

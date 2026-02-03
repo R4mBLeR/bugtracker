@@ -8,10 +8,13 @@ import {
   HttpStatus,
   HttpCode,
   Delete,
+  Query,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { CreateReportDto } from 'src/dto/create-report.dto';
 import { DeleteReportDto } from 'src/dto/delete-report.dto';
+import { AuthGuard } from 'src/guards/auth.guard';
 import { ReportService } from 'src/services/report.service';
 
 @Controller('reports')
@@ -32,6 +35,12 @@ export class ReportController {
     return report;
   }
 
+  @Get()
+  @HttpCode(HttpStatus.OK)
+  async getReportsByStatus(@Query('status') status: string) {
+    return this.reportService.getReportsByStatus(status);
+  }
+
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async createReport(@Body() createReportDto: CreateReportDto) {
@@ -41,6 +50,7 @@ export class ReportController {
 
   @Delete()
   @ApiBearerAuth('JWT-auth')
+  @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.ACCEPTED)
   async deleteReport(@Body() deleteReportDto: DeleteReportDto) {
     const report = await this.reportService.deleteReport(deleteReportDto);

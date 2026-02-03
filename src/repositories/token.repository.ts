@@ -1,6 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { Token } from 'src/models/token.entity';
+import { User } from 'src/models/user.entity';
 
 @Injectable()
 export class TokenRepository {
@@ -11,16 +12,23 @@ export class TokenRepository {
     this.repo = this.dataSource.getRepository(Token);
   }
 
-  async findById(id: number): Promise<Token | null> {
-    return await this.repo.findOne({ where: { id } });
-  }
-
   async create(tokenData: Partial<Token>): Promise<Token> {
-    const report = this.repo.create(tokenData);
-    return await this.repo.save(report);
+    const token = this.repo.create(tokenData);
+    return await this.repo.save(token);
   }
 
-  async delete(token: number): Promise<void> {
-    await this.repo.delete(token);
+  async delete(refresh_token: string): Promise<void> {
+    await this.repo.delete({ refresh_token });
+  }
+
+  async checkToken(refresh_token: string): Promise<User | null> {
+    const token = await this.repo.findOne({
+      where: { refresh_token },
+      relations: ['user'],
+    });
+    if (token == null) return null;
+    const diff = new Date().getTime() - new Date(token.expires_at).getTime();
+    if (diff >= 0) return null;
+    return token.user;
   }
 }
