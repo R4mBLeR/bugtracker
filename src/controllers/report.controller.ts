@@ -11,7 +11,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiQuery } from '@nestjs/swagger';
 import { CreateReportDto } from 'src/dto/create-report.dto';
 import { DeleteReportDto } from 'src/dto/delete-report.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
@@ -22,10 +22,17 @@ export class ReportController {
   constructor(private readonly reportService: ReportService) {}
 
   @Get()
-  @HttpCode(HttpStatus.OK)
-  async getAllReports() {
-    const reports = await this.reportService.getAllReports();
-    return reports;
+  @ApiOperation({ summary: 'Get all reports or filter by status' })
+  @ApiQuery({
+    name: 'status',
+    required: false,
+    description: 'Filter reports by status',
+  })
+  async getReports(@Query('status') status?: string) {
+    if (status) {
+      return this.reportService.getReportsByStatus(status);
+    }
+    return this.reportService.getAllReports();
   }
 
   @Get(':id')
@@ -33,12 +40,6 @@ export class ReportController {
   async getReportById(@Param('id', ParseIntPipe) id: number) {
     const report = await this.reportService.getReportById(id);
     return report;
-  }
-
-  @Get()
-  @HttpCode(HttpStatus.OK)
-  async getReportsByStatus(@Query('status') status: string) {
-    return this.reportService.getReportsByStatus(status);
   }
 
   @Post()
