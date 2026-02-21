@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Get,
   Post,
   UsePipes,
   ValidationPipe,
@@ -14,7 +13,7 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { UpdateTokensDto } from 'src/dto/update-tokens.dto';
 
-@Controller()
+@Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
@@ -46,8 +45,8 @@ export class AuthController {
     return user;
   }
 
-  @Post('update_tokens')
-  async updateTokens(@Body() tokensDto: UpdateTokensDto) {
+  @Post('refresh')
+  async refreshTokens(@Body() tokensDto: UpdateTokensDto) {
     const pair = await this.authService.updateTokens(tokensDto.refresh_token);
     return pair;
   }

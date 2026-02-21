@@ -48,11 +48,11 @@ export class ReportService {
   }
 
   async deleteReport(deleteReportDto: DeleteReportDto) {
-    const report = await this.reportRepository.delete(deleteReportDto.id);
-    if (report == undefined) {
+    const result = await this.reportRepository.delete(deleteReportDto.id);
+    if (result.affected === 0) {
       throw new NotFoundException(`REPORT_NOT_FOUND`);
     }
-    return report;
+    return { success: Boolean(result.affected) };
   }
 
   async checkEmailCooldown(email: string) {

@@ -1,8 +1,8 @@
 import { Entity, Column, PrimaryColumn, ManyToOne } from 'typeorm';
 import { User } from './user.entity';
 
-@Entity('tokens')
-export class Token {
+@Entity('sessions')
+export class Session {
   @PrimaryColumn({ unique: true })
   refresh_token: string;
 

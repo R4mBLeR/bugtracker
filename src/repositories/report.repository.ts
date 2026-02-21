@@ -1,6 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { Report } from '../models/report.entity';
+import { DeleteResult } from 'typeorm/browser';
 
 @Injectable()
 export class ReportRepository {
@@ -32,7 +33,7 @@ export class ReportRepository {
     return await this.repo.save(report);
   }
 
-  async delete(id: number): Promise<void> {
-    await this.repo.delete(id);
+  async delete(id: number): Promise<DeleteResult> {
+    return await this.repo.delete(id);
   }
 }

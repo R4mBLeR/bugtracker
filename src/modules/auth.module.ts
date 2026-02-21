@@ -3,7 +3,7 @@ import { DatabaseModule } from './database.module';
 import { AuthService } from 'src/services/auth.service';
 import { UserRepository } from 'src/repositories/user.repository';
 import { AuthController } from 'src/controllers/auth.controller';
-import { TokenRepository } from 'src/repositories/token.repository';
+import { TokenRepository } from 'src/repositories/session.repository';
 
 @Module({
   imports: [DatabaseModule], // Важно: импортируем модуль с БД

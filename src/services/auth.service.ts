@@ -1,7 +1,7 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from 'src/dto/create-user.dto';
 import { LoginUserDto } from 'src/dto/login-user.dto';
-import { TokenRepository } from 'src/repositories/token.repository';
+import { TokenRepository } from 'src/repositories/session.repository';
 import { UserRepository } from 'src/repositories/user.repository';
 import { AuthUtils } from 'src/utils/auth.utils';
 
@@ -57,7 +57,7 @@ export class AuthService {
   }
 
   async updateTokens(token: string) {
-    const user = await this.tokenRepository.checkToken(token);
+    const user = await this.tokenRepository.checkSession(token);
     if (user == null) {
       throw new ConflictException(`REFRESH_TOKEN_IS_EXPIRED_OR_REVOKED`);
     }
