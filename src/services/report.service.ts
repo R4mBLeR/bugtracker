@@ -6,6 +6,7 @@ import {
 import { ReportRepository } from '../repositories/report.repository';
 import { CreateReportDto } from 'src/dto/create-report.dto';
 import { DeleteReportDto } from 'src/dto/delete-report.dto';
+import { UpdateReportStatusDto } from 'src/dto/update-report-status.dto';
 
 @Injectable()
 export class ReportService {
@@ -53,6 +54,17 @@ export class ReportService {
       throw new NotFoundException(`REPORT_NOT_FOUND`);
     }
     return { success: Boolean(result.affected) };
+  }
+
+  async updateReportStatus(updateReportStatusDto: UpdateReportStatusDto) {
+    const result = await this.reportRepository.findById(
+      updateReportStatusDto.id,
+    );
+    if (!result) {
+      throw new NotFoundException(`REPORT_NOT_FOUND`);
+    }
+    result.status = updateReportStatusDto.status;
+    return await this.reportRepository.save(result);
   }
 
   async checkEmailCooldown(email: string) {

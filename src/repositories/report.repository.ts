@@ -36,4 +36,8 @@ export class ReportRepository {
   async delete(id: number): Promise<DeleteResult> {
     return await this.repo.delete(id);
   }
+
+  async save(report: Report): Promise<Report> {
+    return this.repo.save(report);
+  }
 }
