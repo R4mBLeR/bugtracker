@@ -7,8 +7,11 @@ import * as dotenv from 'dotenv';
 import * as path from 'path';
 import { ValidationPipe } from '@nestjs/common';
 
-const envPath = path.resolve(process.cwd(), '.env');
-console.log(`📁 Loading .env from: ${envPath}`);
+const environment = process.env.NODE_ENV || 'development';
+const envFile = environment === 'production' ? '.env.prod' : '.env.dev';
+const envPath = path.resolve(process.cwd(), envFile);
+
+console.log(`📁 Loading environment from: ${envPath} (${environment} mode)`);
 
 dotenv.config({ path: envPath });
 
@@ -25,9 +28,9 @@ async function bootstrap() {
 
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true, // удаляет поля, не описанные в DTO
-      forbidNonWhitelisted: true, // выбрасывает ошибку при лишних полях
-      transform: true, // автоматически преобразует типы
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
       transformOptions: {
         enableImplicitConversion: true,
       },
@@ -39,9 +42,7 @@ async function bootstrap() {
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle(configService.get('SWAGGER_TITLE', 'BugTracker API'))
-    .setDescription(
-      configService.get('SWAGGER_DESCRIPTION', 'API documentation'),
-    )
+    .setDescription(configService.get('SWAGGER_DESCRIPTION', 'API documentation'))
     .setVersion(configService.get('SWAGGER_VERSION', '1.0'))
     .addBearerAuth(
       {
@@ -62,14 +63,13 @@ async function bootstrap() {
   SwaggerModule.setup(swaggerPath, app, document);
 
   const port: number = configService.get<number>('PORT', 5050);
-  await app.listen(port);
+  const host: string = configService.get<string>('HOST', '0.0.0.0'); 
+  await app.listen(port, host);
 
   console.log(`🚀 Application is running on: http://localhost:${port}`);
   console.log(`📚 Swagger UI: http://localhost:${port}/${swaggerPath}`);
   console.log(`🌐 API Base URL: http://localhost:${port}/${apiPrefix}`);
-  console.log(
-    `⚡ Environment: ${configService.get('NODE_ENV', 'development')}`,
-  );
+  console.log(`⚙️ Environment: ${environment}`);
 }
 
 bootstrap();

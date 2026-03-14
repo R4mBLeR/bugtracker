@@ -60,3 +60,4 @@ eslint.config.mts
 .env.production
 .env.development
 database.db
+.env.prod
