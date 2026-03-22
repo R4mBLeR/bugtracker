@@ -16,4 +16,4 @@ EXPOSE 8080
 
 ENV DATABASE_PATH=/app/data/database.db
 
-CMD ["node", "dist/main.js"]
+CMD ["node", "dist/src/main.js"]
