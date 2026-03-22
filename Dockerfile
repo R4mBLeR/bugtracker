@@ -17,7 +17,7 @@ COPY --chown=node:node .env.prod .env
 
 ENV NODE_ENV=production
 
-RUN npm run build --verbose
+RUN npm run build 
 
 EXPOSE 8080
 
