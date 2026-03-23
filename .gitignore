@@ -61,3 +61,5 @@ eslint.config.mts
 .env.development
 database.db
 .env.prod
+.vercel
+.env*.local

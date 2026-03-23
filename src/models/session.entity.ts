@@ -6,7 +6,7 @@ export class Session {
   @PrimaryColumn({ unique: true })
   refresh_token: string;
 
-  @Column({ type: 'datetime', name: 'expires_at' })
+  @Column({ type: 'timestamp', name: 'expires_at' })
   expires_at: Date;
 
   @ManyToOne(() => User)
