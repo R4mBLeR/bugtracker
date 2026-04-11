@@ -13,6 +13,6 @@ export class UpdateReportStatusDto {
     example: 'closed',
     required: true,
   })
-  @IsString({ message: 'status must be string' })
-  status: string;
+  @IsInt({ message: 'status must be number' })
+  status: number;
 }

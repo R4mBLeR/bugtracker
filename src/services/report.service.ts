@@ -29,7 +29,7 @@ export class ReportService {
     return report;
   }
 
-  async getReportsByStatus(status: string) {
+  async getReportsByStatus(status: number) {
     const reports = await this.reportRepository.findByStatus(status);
     if (!reports || reports.length === 0) {
       throw new NotFoundException('NO_AVAILABLE_REPORTS_FOUND');

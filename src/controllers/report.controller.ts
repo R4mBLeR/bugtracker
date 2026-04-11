@@ -29,7 +29,7 @@ export class ReportController {
     required: false,
     description: 'Filter reports by status',
   })
-  async getReports(@Query('status') status?: string) {
+  async getReports(@Query('status') status?: number) {
     if (status) {
       return this.reportService.getReportsByStatus(status);
     }
@@ -43,14 +43,14 @@ export class ReportController {
     return report;
   }
 
-  @Post()
+  @Post('create')
   @HttpCode(HttpStatus.CREATED)
   async createReport(@Body() createReportDto: CreateReportDto) {
     const report = await this.reportService.createReport(createReportDto);
     return report;
   }
 
-  @Delete()
+  @Delete('delete')
   @ApiBearerAuth('JWT-auth')
   @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.ACCEPTED)

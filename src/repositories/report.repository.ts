@@ -24,7 +24,7 @@ export class ReportRepository {
     return await this.repo.find({ where: { email } });
   }
 
-  async findByStatus(status: string): Promise<Report[]> {
+  async findByStatus(status: number): Promise<Report[]> {
     return await this.repo.find({ where: { status } });
   }
 

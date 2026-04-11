@@ -40,5 +40,5 @@ export class CreateReportDto {
   })
   @IsBoolean({ message: 'has_attachment must be true or false' })
   @IsOptional()
-  has_attachment?: boolean = false; // Default value
+  has_attachment?: boolean = false;
 }

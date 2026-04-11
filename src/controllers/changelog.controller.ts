@@ -13,6 +13,7 @@ import {
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { CreateChangelogDto } from 'src/dto/create-changelog.dto';
 import { DeleteChangelogDto } from 'src/dto/delete-changelog.dto';
+import { UpdateChangelogDto } from 'src/dto/update-changelog.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { ChangelogService } from 'src/services/changelog.service';
 
@@ -23,34 +24,44 @@ export class ChangelogController {
   @Get()
   @HttpCode(HttpStatus.OK)
   async getAllChangelogs() {
-    const reports = await this.changelogService.getAllChangelogs();
-    return reports;
+    const changelogs = await this.changelogService.getAllChangelogs();
+    return changelogs;
   }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   async getChangelogById(@Param('id', ParseIntPipe) id: number) {
-    const report = await this.changelogService.getChangelogById(id);
-    return report;
+    const changelog = await this.changelogService.getChangelogById(id);
+    return changelog;
   }
 
-  @Post()
+  @Post('create')
   @ApiBearerAuth('JWT-auth')
   @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.CREATED)
   async createChangelog(@Body() createChangelogDto: CreateChangelogDto) {
-    const report =
+    const changelog =
       await this.changelogService.createChangelog(createChangelogDto);
-    return report;
+    return changelog;
   }
 
-  @Delete()
+  @Post('update')
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(AuthGuard)
+  @HttpCode(HttpStatus.CREATED)
+  async updateChangelog(@Body() updateChangelogDto: UpdateChangelogDto) {
+    const changelog =
+      await this.changelogService.updateChangelog(updateChangelogDto);
+    return changelog;
+  }
+
+  @Delete('delete')
   @ApiBearerAuth('JWT-auth')
   @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.ACCEPTED)
   async deleteChangelog(@Body() deleteChangelogDto: DeleteChangelogDto) {
-    const report =
+    const changelog =
       await this.changelogService.deleteChangelog(deleteChangelogDto);
-    return report;
+    return changelog;
   }
 }
