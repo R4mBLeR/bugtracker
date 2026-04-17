@@ -73,7 +73,7 @@ export class ReportService {
       const date = reportsWithEmail[reportsWithEmail.length - 1].created_at;
       const diff = new Date().getTime() - new Date(date).getTime();
       const diffMinutes = diff / 1000 / 60;
-      if (diffMinutes < 30) {
+      if (diffMinutes < 1) {
         throw new ConflictException(`TIME_SEND_COOLDOWN`);
       }
     }
