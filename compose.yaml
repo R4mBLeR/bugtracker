@@ -1,0 +1,7 @@
+﻿services:
+  bugtrackerwebapi:
+    image: bugtrackerwebapi
+    build:
+      context: .
+      dockerfile: Dockerfile
+
