@@ -2,7 +2,7 @@
 
 namespace BugTrackerWebAPI.DTOs
 {
-    public class UpdateReportStatusDto
+    public class ReportUpdateDto
     {
         [Required]
         public int Id { get; set; }

@@ -2,7 +2,7 @@
 
 namespace BugTrackerWebAPI.DTOs
 {
-    public class CreateReportDto
+    public class ReportCreateDto
     {
         [Required]
         public required string Email { get; set; }

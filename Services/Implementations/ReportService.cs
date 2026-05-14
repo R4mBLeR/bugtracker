@@ -48,14 +48,14 @@ public class ReportService : IReportService
         }
     }
 
-    public async Task<Report> CreateReportAsync(CreateReportDto createReportDto)
+    public async Task<Report> CreateReportAsync(ReportCreateDto createReportDto)
     {
         Report report = new Report(createReportDto);
         var createdReport = await _reportRepository.CreateReportAsync(report);
         return createdReport;
     }
 
-    public async Task<Report> UpdateReportStatusAsync(UpdateReportStatusDto updateReportDto)
+    public async Task<Report> UpdateReportStatusAsync(ReportUpdateDto updateReportDto)
     {
         try
         {

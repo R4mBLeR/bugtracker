@@ -52,7 +52,7 @@ public class ReportController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Report>> CreateReport([FromBody] CreateReportDto createReportDto)
+    public async Task<ActionResult<Report>> CreateReport([FromBody] ReportCreateDto createReportDto)
     {
         if (!ModelState.IsValid)
         {
@@ -72,7 +72,7 @@ public class ReportController : ControllerBase
     }
 
     [HttpPut("status")]
-    public async Task<ActionResult<Report>> UpdateReportStatus([FromBody] UpdateReportStatusDto updateReportDto)
+    public async Task<ActionResult<Report>> UpdateReportStatus([FromBody] ReportUpdateDto updateReportDto)
     {
         if (!ModelState.IsValid)
         {

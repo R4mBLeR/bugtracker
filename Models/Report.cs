@@ -4,11 +4,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BugTrackerWebAPI.Models;
 
-public class Report
+public class Report : BaseModel
 {
-    [Key]
-    public int Id { get; set; }
-
     [Required]
     public string Email { get; set; }
 
@@ -34,7 +31,7 @@ public class Report
         CreatedAt = createdAt;
     }
 
-    public Report(CreateReportDto createReportDto)
+    public Report(ReportCreateDto createReportDto)
     {
         Email = createReportDto.Email;
         Title = createReportDto.Title;

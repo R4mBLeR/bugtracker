@@ -7,7 +7,7 @@ public interface IReportService
 {
     Task<IEnumerable<Report>> GetAllReportsAsync();
     Task<Report> GetReportByIdAsync(int id);
-    Task<Report> CreateReportAsync(CreateReportDto createReportDto);
-    Task<Report> UpdateReportStatusAsync(UpdateReportStatusDto updateReportDto);
+    Task<Report> CreateReportAsync(ReportCreateDto createReportDto);
+    Task<Report> UpdateReportStatusAsync(ReportUpdateDto updateReportDto);
     Task<bool> DeleteReportAsync(int id);
 }

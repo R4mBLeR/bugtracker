@@ -1,4 +1,5 @@
 using BugTrackerWebAPI.Models;
+using BugTrackerWebAPI.Models.Auth;
 using Microsoft.EntityFrameworkCore;
 
 namespace BugTrackerWebAPI;
@@ -9,6 +10,7 @@ public class BugTrackerDbContext : DbContext
         : base(options)
     {
     }
-    
+
+    public DbSet<User> Users { get; set; }
     public DbSet<Report> Reports { get; set; }
 }
